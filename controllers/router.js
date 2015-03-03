@@ -11,4 +11,5 @@ module.exports = function(app) {
     app.post('/users', users.create);
     app.get('/users/:id/verify', users.showVerify);
     app.post('/users/:id/verify', users.verify);
+    app.get('/users/:id', users.showUser);
 };

@@ -3,5 +3,5 @@ $(document).ready(function() {
     // to quickly repair the visible form field
     setTimeout(function() {
         $('.countries-input').addClass('form-control');
-    },1);
+    }, 50);
 });

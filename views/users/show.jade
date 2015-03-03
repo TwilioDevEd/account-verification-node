@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  h1= user.fullName
+  p= 'Account Status: ' + (user.verified ? 'Verified' : 'Not Verified')
+
+  if !user.verified
+    p
+      a(href='/users/'+user._id+'/verify') Verify your account now.

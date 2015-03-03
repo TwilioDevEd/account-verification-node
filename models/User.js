@@ -2,8 +2,9 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var config = require('../config');
 
-// Create authenticated Authy API client
+// Create authenticated Authy and Twilio API clients
 var authy = require('authy')(config.authyKey);
+var twilioClient = require('twilio')(config.accountSid, config.authToken);
 
 // Used to generate password hash
 var SALT_WORK_FACTOR = 10;
@@ -93,7 +94,7 @@ UserSchema.methods.sendAuthyToken = function(cb) {
 
     // With a valid Authy ID, send the 2FA token for this user
     function sendToken() {
-        authy.request_sms(self.authyId, function(err, response) {
+        authy.request_sms(self.authyId, true, function(err, response) {
             cb.call(self, err);
         });
     }
@@ -104,6 +105,18 @@ UserSchema.methods.verifyAuthyToken = function(otp, cb) {
     var self = this;
     authy.verify(self.authyId, otp, function(err, response) {
         cb.call(self, err, response);
+    });
+};
+
+// Send a text message via twilio to this user
+UserSchema.methods.sendMessage = function(message, cb) {
+    var self = this;
+    twilioClient.sendMessage({
+        to: self.countryCode+self.phone,
+        from: config.twilioNumber,
+        body: message
+    }, function(err, response) {
+        cb.call(self, err);
     });
 };
 
