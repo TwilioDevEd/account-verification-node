@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title= title || 'Twilio Starter Project for Node.js and Express'
+    title= title || 'Account Verification with Node.js and Express'
 
     // Twilio shortcut icons
     link(rel='shortcut icon', 
@@ -29,8 +29,8 @@ html(lang='en')
     script(src='//oss.maxcdn.com/respond/1.4.2/respond.min.js')
     <![endif]-->
 
+    // Page styles
     link(rel='stylesheet', href='/css/main.css')
-
     //- Include any page-specific styles
     block styles
 
@@ -45,38 +45,33 @@ html(lang='en')
             data-target='#navbar', aria-expanded='false', aria-controls='navbar')
             i.fa.fa-bars
 
-          a.navbar-brand(href='/') Twilio Starter
+          a.navbar-brand(href='/') Account Verification
 
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', 
-                aria-expanded='false') Messaging 
-                span.caret
-
-              ul.dropdown-menu(role='menu')
-                li
-                  a(href='/message/send') Send Messages
-                li
-                  a(href='/message') Receive Messages
-
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', 
-                aria-expanded='false') Voice 
-                span.caret
-
-              ul.dropdown-menu(role='menu')
-                li
-                  a(href='/voice/call') Make Calls
-                li
-                  a(href='/voice') Receive Calls
-
             li
-              a(href='/voip') VoIP
+              a(href='/users/new') Sign Up
 
 
     //- Include page content
     #main.container
+
+      // Display any error or informational messages
+      mixin messages(list)
+        i.fa.fa-close
+        each message in list
+          p= message
+
+      .message-list
+        if (errors && errors.length > 0)
+          .box.bg-danger
+            +messages(errors)
+
+        if (successes && successes.length > 0)
+          .box.bg-success
+            +messages(successes)
+
+      //- Include page content 
       block content
 
     footer.container.
@@ -87,5 +82,7 @@ html(lang='en')
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
     script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
 
+    // Include page scripts
+    script(src='/js/main.js')
     //- Include any page-specific scripts
     block scripts

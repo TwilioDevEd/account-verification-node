@@ -1,0 +1,41 @@
+extends ../layout
+
+block styles
+  link(rel='stylesheet', media='screen'
+    href='//www.authy.com/form.authy.min.css')
+
+block content
+  h1 We're Going To Be *BEST* Friends
+  p.
+    Thank you for your interest in signing up! Can you tell us a bit about 
+    yourself?
+
+  form(action='/users', method='POST')
+    .form-group
+      label(for='fullName') Your Full Name:
+      input.form-control(type='text', name='fullName', 
+        placeholder='Peggy Carter')
+
+    .form-group
+      label(for='email') Your E-Mail Address:
+      input.form-control(type='email', name='email', 
+        placeholder='pcarter@ssr.gov')
+
+    .form-group
+      label(for='password') Your Password:
+      input.form-control(type='password', name='password')
+
+    .form-group
+      label(for='countryCode') Country Code:
+      select(id='authy-countries', name='countryCode')
+
+    .form-group
+      label(for='phone') Mobile Phone:
+      input.form-control(type='text', name='phone', placeholder='651-867-5309')
+
+    button.btn.btn-primary(type='submit') Create Account
+
+block scripts
+  // Include Authy form helpers and additional helper script
+  script(src='//www.authy.com/form.authy.min.js')
+  script(src='/js/create_form.js')
