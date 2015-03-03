@@ -34,7 +34,12 @@ exports.create = function(request, response) {
             response.redirect('/users/new');
 
         } else {
-            response.send('cool beans');
+            // If the user is created successfully, send them an account
+            // verification token
+            user.sendAuthyToken(function(err) {
+                console.log(err);
+                response.send('cool beans - authy token sent');
+            });
         }
     });
 };

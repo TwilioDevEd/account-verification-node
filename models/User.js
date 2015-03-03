@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt');
 var config = require('../config');
 
 // Create authenticated Authy API client
-var authy = require('authy')(config.authyApiKey);
+var authy = require('authy')(config.authyKey);
 
 // Used to generate password hash
 var SALT_WORK_FACTOR = 10;
