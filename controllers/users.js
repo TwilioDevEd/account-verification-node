@@ -53,18 +53,50 @@ exports.create = function(request, response) {
 exports.showVerify = function(request, response) {
     response.render('users/verify', {
         title: 'Verify Phone Number',
-        // include any errors (success messages not possible for view)
+        // include any errors
         errors: request.flash('errors'),
+        // success messsages
+        successes: request.flash('successes'),
         // Include database ID to include in form POST action
         id: request.params.id
     });
 };
 
+// Resend a code if it was not received
+exports.resend = function(request, response) {
+    // Load user model
+    User.findById(request.params.id, function(err, user) {
+        if (err || !user) {
+            return die('User not found for this ID.');
+        }
+
+        // If we find the user, let's send them a new code
+        user.sendAuthyToken(postSend);
+    });
+
+    // Handle send code response
+    function postSend(err) {
+        if (err) {
+            return die('There was a problem sending you the code - please '
+                + 'retry.');
+        }
+
+        request.flash('successes', 'Code re-sent!');
+        response.redirect('/users/'+request.params.id+'/verify');
+    }
+
+    // respond with an error
+    function die(message) {
+        request.flash('errors', message);
+        response.redirect('/users/'+request.params.id+'/verify');
+    }
+};
+
 // Handle submission of verification token
 exports.verify = function(request, response) {
-    // Load user model
     var user;
 
+    // Load user model
     User.findById(request.params.id, function(err, doc) {
         if (err || !doc) {
             return die('User not found for this ID.');
