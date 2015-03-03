@@ -9,4 +9,6 @@ module.exports = function(app) {
     // Routes for account creation
     app.get('/users/new', users.showCreate);
     app.post('/users', users.create);
+    app.get('/users/:id/verify', users.showVerify);
+    app.post('/users/:id/verify', users.verify);
 };
