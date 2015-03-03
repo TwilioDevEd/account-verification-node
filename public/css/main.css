@@ -1,0 +1,21 @@
+#main {
+    padding-top:70px;
+}
+
+.demo {
+    background-color:#eee;
+    border:1px solid #ccc;
+    border-radius:5px;
+    padding:10px;
+}
+
+footer {
+    border-top:1px solid #eee;
+    padding:20px;
+    margin:20px;
+    text-align:center;
+}
+
+footer i {
+    color:red;
+}

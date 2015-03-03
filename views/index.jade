@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 Welcome to the Twilio Starter Project for Node.js and Express!
+
+  p.
+    This starter application contains code samples you can build from to
+    accomplish basic tasks with the Twilio API.  What would you like to do?
+
+  ul
+    li
+      a(href='/message/send') Send SMS or MMS messages
+    li
+      a(href='/message') Receive SMS or MMS messages
+    li
+      a(href='/voice/call') Make phone calls
+    li
+      a(href='/voice') Receive phone calls
+    li
+      a(href='/voip') VoIP calling in the browser
