@@ -1,0 +1,37 @@
+{
+  "name": "Account Verification",
+  "description": "Demo application demonstrating account verification with Authy, Node.js, and Express",
+  "keywords": [
+    "twilio",
+    "node.js",
+    "mongodb",
+    "mongoose",
+    "express",
+    "authy"
+  ],
+  "env": {
+    "TWILIO_ACCOUNT_SID": {
+      "description": "API username - find your account SID at https://www.twilio.com/user/account/voice-messaging",
+      "required": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "description": "API password - find your auth token at https://www.twilio.com/user/account/voice-messaging",
+      "required": true
+    },
+    "TWILIO_NUMBER": {
+      "description": "A number in your Twilio account to use with this application in E.164 format (e.g. +16518675309) - view your numbers at https://www.twilio.com/user/account/phone-numbers/incoming",
+      "required": true
+    },
+    "AUTHY_API_KEY": {
+      "description": "Your Authy production key - found on your Authy app's dashboard.",
+      "required": true
+    }
+  },
+  "website": "https://github.com/TwilioDevEd/account-verification-node",
+  "repository": "https://github.com/TwilioDevEd/account-verification-node",
+  "logo": "https://s3.amazonaws.com/howtodocs/twilio-logo.png",
+  "success_url": "/",
+  "addons": [
+    "mongolab"
+  ]
+}

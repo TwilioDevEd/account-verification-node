@@ -1,0 +1,88 @@
+doctype html
+html(lang='en')
+  head
+    title= title || 'Account Verification with Node.js and Express'
+
+    // Twilio shortcut icons
+    link(rel='shortcut icon', 
+      href='//twilio.com/bundles/marketing/img/favicons/favicon.ico')
+    link(rel='apple-touch-icon', 
+      href='//twilio.com/bundles/marketing/img/favicons/favicon_57.png')
+    link(rel='apple-touch-icon', sizes='72x72', 
+      href='/bundles/marketing/img/favicons/favicon_72.png')
+    link(rel='apple-touch-icon' sizes='114x114' 
+      href='//twilio.com/bundles/marketing/img/favicons/favicon_114.png')
+
+    // Include Font Awesome Icons
+    link(rel='stylesheet',
+      href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
+
+    // Twitter Bootstrap included for some basic styling
+    link(rel='stylesheet', 
+      href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
+    link(rel='stylesheet', 
+      href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css')
+
+    // HTML 5 shims for older IE
+    <!--[if lt IE 9]>
+    script(src='//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js')
+    script(src='//oss.maxcdn.com/respond/1.4.2/respond.min.js')
+    <![endif]-->
+
+    // Page styles
+    link(rel='stylesheet', href='/css/main.css')
+    //- Include any page-specific styles
+    block styles
+
+  body
+    // Bootstrap-powered nav bar
+    nav.navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+
+          //- Nav bar toggle for mobile
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse',
+            data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+            i.fa.fa-bars
+
+          a.navbar-brand(href='/') Account Verification
+
+        #navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='/users/new') Sign Up
+
+
+    //- Include page content
+    #main.container
+
+      // Display any error or informational messages
+      mixin messages(list)
+        i.fa.fa-close
+        each message in list
+          p= message
+
+      .message-list
+        if (errors && errors.length > 0)
+          .box.bg-danger
+            +messages(errors)
+
+        if (successes && successes.length > 0)
+          .box.bg-success
+            +messages(successes)
+
+      //- Include page content 
+      block content
+
+    footer.container.
+      Made with <i class="fa fa-heart"></i> by your pals 
+      <a href="http://www.twilio.com">@twilio</a>.
+
+    // Include jQuery and Bootstrap scripts
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
+
+    // Include page scripts
+    script(src='/js/main.js')
+    //- Include any page-specific scripts
+    block scripts

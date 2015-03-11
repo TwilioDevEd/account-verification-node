@@ -1,0 +1,22 @@
+extends ../layout
+
+block styles
+  link(rel='stylesheet', href='/css/verify.css')
+
+block content
+  h1 Just To Be Safe...
+  p.
+    Your account has been created, but we need to make sure you're a human
+    in control of the phone number you gave us. Can you please enter the 
+    verification code we just sent to your phone?
+
+  form(action='/users/'+id+'/verify', method='POST')
+    .form-group
+      label(for='code') Verification Code:
+      input.form-control(type='text', name='code')
+
+    button.btn.btn-primary(type='submit') Verify Token
+
+  form(action='/users/'+id+'/resend', method='POST')
+    .form-group
+      button.btn.btn-link(type='submit') Resend My Code
