@@ -1,0 +1,28 @@
+.step(data-title='Re-send the One-Time Password', data-file="views/users/verify.jade", data-language='jade')
+  :markdown
+    ### User Story: Re-send the One-Time Password
+
+    <blockquote>As a user, I want to click a link on the code verification page to re-send my code if I don't receive it on my phone.</blockquote>
+
+    This story covers the case where an end user did not receive their verification code for some reason. Here's what needs to get done to complete this story:
+
+    * Create a form that requests that a new one-time password be sent to a user
+    * Create a controller function to handle that form submission and re-send the code
+
+    You might recall there were actually two forms on the Jade template we looked at earlier. Let's look at that second one now.
+
+.step(data-title="Re-Send Code Form", data-file="views/users/verify.jade", data-highlight="20-22", data-language='jade')
+  :markdown
+    ### Re-send Code Form
+
+    Here, we provide a form with no fields that submits a `POST` request to our back end, requesting that a new code be sent to the current user.
+
+    Let's look at the controller which handles this form next.
+
+.step(data-title='Re-sending The Code', data-file='controllers/users.js', data-highlight='65-93')
+  :markdown
+    ### Re-sending the Code
+
+    This controller function loads the `User` model associated with the request and then uses the same instance function we defined earlier to resend the code. Pretty straightforward!
+
+    To wrap things up, let's implement our last user story where we confirm for the user that their account has been verified with a text message and a success page.

@@ -1,0 +1,110 @@
+.step(data-title='Introduction')
+  :markdown
+    ### User Account Verification
+
+    Ready to implement user account verification in your application? Here's how it works at a high level:
+
+    1. The user begins the registration process by entering their data, including a phone number, into a signup form
+
+    1. The authentication system sends a one-time password to the user's mobile phone to verify their possession of that phone number
+
+    1. The user enters the one-time password into a form before completing registeration
+
+    1. The user sees a success page and receives an SMS indicating that their account has been created
+
+    ### Building Blocks
+
+    To get this done, you'll be working with the following Twilio-powered APIs:
+
+    **Authy REST API**
+
+    * [Users Resource](https://docs.authy.com/#section-Enabling_two-factor_on_a_user): You will need to create Authy users to send and verify one-time passwords with them.
+    * [SMS Resource](https://docs.authy.com/#section-Text_Messages): We will ask Authy to send one-time passwords to our user via SMS
+    * [Verify Resource](https://docs.authy.com/#section-Verifying_a_token): Used to verify tokens entered by the user in our web form during registration
+
+    **Twilio REST API**
+    * [Messages Resource](/docs/api/rest/sending-sms): We will use Twilio directly to send our user a confirmation message after they create an account
+
+    Let's get started! Click the right arrow to move on to the next step of the tutorial.
+
+.step(data-title="About This Tutorial")
+  :markdown
+    ### About This Tutorial
+
+    In this tutorial, we will be working through a series of [user stories](http://en.wikipedia.org/wiki/User_story) that describe how to fully implement account verification in a web application. Our team implemented this example application in about 12 story points (roughly equivalent to 12 working hours).
+
+    Let's get started with our first user story around creating a new user account.
+
+
+.step(data-title='Registering a User Account', data-file='models/User.js', data-highlight='')
+  :markdown
+    ### User Story: Registering an Account
+
+    <blockquote>As a user, I want to register for a new user account with my e-mail, full name, mobile phone number, and a password.</blockquote>
+
+    To do account verification, you definitely need to start with an account! This story requires that we create a bit of UI and a model object to create and save a new `User` in our system. At a high level, here's what we will need to add:
+
+    * A form to enter details about the new user
+    * A route and controller function on the server to render the form
+    * A route and controller function on the server to handle the form POST request
+    * A persistent `User` model object to store information about the user
+
+    Let's begin looking at the implementation for this story at the model level, where we decide what information we want to store about our user.
+
+
+.step(data-title='Registering a User Account', data-file='models/User.js', data-highlight='12-40')
+  :markdown
+    ### Defining the User Model
+
+    Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the `User` model in the [2FA tutorial](/docs/howto/walkthrough/two-factor-authentication/node/express) that uses Authy as well. This application uses [MongoDB](http://www.mongodb.com/) for persistence, but in our code we will primarily interface with [Mongoose](http://mongoosejs.com/), a higher-level object modeling tool which is backed by MongoDB.
+
+    You define the properties of a model object in Mongoose with a [Schema](http://mongoosejs.com/docs/guide.html). To satisfy this user story, we need to add a few properties to this model, like an e-mail address, full name, and a Boolean flag indicating whether or not this account has been verified.  When you create a Mongoose [Model](http://mongoosejs.com/docs/models.html) based on this schema, that model object will allow you to create, save, and delete objects with this set of properties.
+
+    You'll notice an `authyId` property on the model - [this is required to support integration with the Authy API](https://docs.authy.com/#section-Enabling_two-factor_on_a_user). We won't use this property right away, but we'll need it later for the Authy integration.
+
+    One of the properties on the `User` model, per the user story, is a password (we'll probably want that later to log a user in, even though it's not in scope for this tutorial). Since passwords are sensitive data, they require some special handling - let's look at how to do that next.
+
+.step(data-title='Dealing with Passwords', data-file='models/User.js', data-highlight='42-62')
+  :markdown
+    ### Dealing with Passwords
+
+    You never want to store a user's password in clear text in the database. Before writing the password to MongoDB, we need to hash that value.
+
+    A decent place to handle that step in a Mongoose model is a [middleware function](http://mongoosejs.com/docs/middleware.html) that executes before the model is saved, as you see here.
+
+    That's all we really need at the model level for now - we just need to be able to create and save a new User model, without storing the password in clear text.
+
+    Now we're ready to move up to the controller level of the application, starting with the HTTP request routes I'll need.
+
+.step(data-title='Adding New Routes', data-file='controllers/router.js', data-highlight='9-11')
+  :markdown
+    ### Adding New Routes
+
+    In an [Express](http://expressjs.com/) application, you define JavaScript functions to handle HTTP requests to different URLS (routes) in your application. Here, we add a route for a `GET` request to render the new user form, and a `POST` route to handle the form submission.
+
+    The router delegates the actual handling of these routes to a separate controller module - let's peek at that next.
+
+.step(data-title='Rendering the New User Form', data-file='ontrollers/users.js', data-highlight='3-10')
+  :markdown
+    ### Rendering the New User Form
+
+    This function will handle a request to render the sign-up form for the application. We generate the HTML for this form using a [Jade template](http://jade-lang.com). This and all the other HTML templates for the application are found in the `views` directory at the top level of the project. We render the template with some context data to insert into it, including any [flash](https://github.com/jaredhanson/connect-flash) messages that might be present after an HTTP redirect.
+
+    Let's go over the Jade template for the form next.
+.step(data-title='The Form Template', data-file='views/users/create.jade', data-language='jade')
+  :markdown
+    ### The Form Template
+
+    This is the Jade template used to render the sign-up form. It [extends the layout](http://jade-lang.com/reference/inheritance/) that already existed in the [starter project we forked to create this app](https://github.com/TwilioDevEd/starter-node-express), so I can insert content, styles, and scripts specific to this page.
+
+    To create a nice country code dropdown menu for the user's mobile phone, we include CSS and JavaScript for [Authy's form helpers](https://github.com/authy/authy-form-helpers). We also include a tiny bit of JavaScript to reset the [Bootstrap](http://getbootstrap.com/) styles we're using on the country code form field after Authy changes it. Otherwise it doesn't quite match the rest of the form.
+
+    Other than that, we have a pretty standard HTML form which submits a `POST` request to the `/user` route we set up earlier. Let's jump back down to the controller for the last step of implementing this user story, which is creating the user from these form inputs.
+
+.step(data-title='Creating the User', data-file='controllers/users.js', data-highlight='12-50')
+  :markdown
+    ### Creating the User
+
+    Back on the server, we create a new instance of a `User` model from the form data submitted by the user. If there's an error when we save the user, we need to store a flash message on the session and redirect back to the form so the user can try again.
+
+    If the `User` is saved successfully, then we're all set for this user story! Of course, there's more going on inside this controller function after the user is saved, but all that code is added as a part of our next user story. Let's check that out right now!

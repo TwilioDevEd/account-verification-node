@@ -1,0 +1,55 @@
+.step(data-title='Sending a One-Time Password', data-file="config.js")
+  :markdown
+    ### User Story: Sending a One-Time Password
+
+    <blockquote>As an authentication system, I want to send a one-time password to a user's mobile phone to verify their possession of that phone number.</blockquote>
+
+    This story covers a process that is invisible to the end user but necessary to power our account verification functionality. After a new user is created, the application needs to send a one-time password to that user's phone to validate the number (and the account). Here's what needs to get done:
+
+    * Create and configure an Authy API client
+    * Modify the controller to send a one-time password after the user is created
+    * Add an instance method to the `User` model to send a one-time password, using Authy, to the phone number associated with it
+
+    Let's begin by modifying the app's configuration to contain our Authy API key.
+
+.step(data-title="Configuring Authy", data-file="config.js", data-highlight="24-26")
+  :markdown
+    ### Configuring Authy
+
+    In `config.js`, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.
+
+    Now, we need our Authy production key ([sign up for Authy here](https://dashboard.authy.com/signup)). When you create an Authy application, the production key is found on the dashboard:
+
+    ![Authy Dashboard](//s3.amazonaws.com/howtodocs/2fa-authy-dashboard.png)
+
+    Next, we need to jump over to the `User` model to configure the Authy client and create an instance method to send a one-time password.
+
+
+.step(data-title='Create an Authy Client', data-file='models/User.js', data-highlight='3-7')
+  :markdown
+    ### Create an Authy Client
+
+    When the `User` CommonJS module is loaded, we create an instance of the Authy API client (using a production key) all instances of a `User` can share.  When we need to send or verify a one-time password, we'll use this single API client instance.
+
+    Now let's see where we use the client to send the one-time password necessary for our verification step.
+
+
+.step(data-title='Send a Verification Token', data-file='models/User.js', data-highlight='73-101')
+  :markdown
+    ### Send a Verification Token
+
+    When it comes time to actually send the user a verification code, we do that in our model function here.
+
+    Before sending the code, an [Authy user](https://docs.authy.com/#section-Enabling_two-factor_on_a_user) needs to exist as a pair for our `User` model in the database.  If the `authyId` for our user instance hasn't been set, we use the Authy API client to create an associated Authy user and store that ID in our database.
+
+    Once the user has an `authyId`, we can actually send a verification code to that user's mobile phone.
+
+    That's it for the model in this story - let's jump back to the controller to see where this model function is called.
+
+.step(data-title='Sending a Token on Account Creation', data-file='controllers/users.js', data-highlight='37-47')
+  :markdown
+    ### Sending a Token on Account Creation
+
+    When our user is created successfully via the form we implemented for the last story, we send a token to the user's mobile phone to verify their account in our controller.  When the code is sent, we redirect to another page where the user can enter the token they were sent, completing the verification process.
+
+    Let's check out the code for that next!
