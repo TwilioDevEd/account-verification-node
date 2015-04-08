@@ -1,6 +1,6 @@
 .step(data-title='Verify the One-Time Password', data-file="views/users/verify.jade", data-language='jade')
   :markdown
-    ### User Story: Verify the One-Time Password
+    ## User Story: Verify the One-Time Password
 
     <blockquote>As a user, I want to enter the one-time password sent to my mobile phone from the authentication system before I complete the signup process.</blockquote>
 
@@ -14,14 +14,14 @@
 
 .step(data-title="The Verification Form", data-file="views/users/verify.jade", data-highlight="13-18", data-language='jade')
   :markdown
-    ### The Verification Form
+    ## The Verification Form
 
     This page actually has two forms, but we'll focus on the first one first. It has only a single field for the verification code, which we'll submit to the server for validation.
 
 
 .step(data-title='Verifying the Code: Controller', data-file='controllers/users.js', data-highlight='95-147')
   :markdown
-    ### Verifying the Code: Controller
+    ## Verifying the Code: Controller
 
     This controller function handles the form submission. It's a little longer than the others, but it has a lot to do. It needs to:
 
@@ -34,7 +34,7 @@
 
 .step(data-title='Verifying the Code: Model', data-file='models/User.js', data-highlight='103-109')
   :markdown
-    ### Verifying the Code: Model
+    ## Verifying the Code: Model
 
     This instance function is a thin wrapper around the Authy client function that sends in a candidate password to be verified. We call Authy, and then immediately call a passed callback function with the result.
 

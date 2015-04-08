@@ -1,6 +1,6 @@
 .step(data-title='Introduction')
   :markdown
-    ### User Account Verification
+    ## User Account Verification
 
     Ready to implement user account verification in your application? Here's how it works at a high level:
 
@@ -12,7 +12,7 @@
 
     1. The user sees a success page and receives an SMS indicating that their account has been created
 
-    ### Building Blocks
+    ## Building Blocks
 
     To get this done, you'll be working with the following Twilio-powered APIs:
 
@@ -29,7 +29,7 @@
 
 .step(data-title="About This Tutorial")
   :markdown
-    ### About This Tutorial
+    ## About This Tutorial
 
     In this tutorial, we will be working through a series of [user stories](http://en.wikipedia.org/wiki/User_story) that describe how to fully implement account verification in a web application. Our team implemented this example application in about 12 story points (roughly equivalent to 12 working hours).
 
@@ -38,7 +38,7 @@
 
 .step(data-title='Registering a User Account', data-file='models/User.js', data-highlight='')
   :markdown
-    ### User Story: Registering an Account
+    ## User Story: Registering an Account
 
     <blockquote>As a user, I want to register for a new user account with my e-mail, full name, mobile phone number, and a password.</blockquote>
 
@@ -54,7 +54,7 @@
 
 .step(data-title='Registering a User Account', data-file='models/User.js', data-highlight='12-40')
   :markdown
-    ### Defining the User Model
+    ## Defining the User Model
 
     Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the `User` model in the [2FA tutorial](/docs/howto/walkthrough/two-factor-authentication/node/express) that uses Authy as well. This application uses [MongoDB](http://www.mongodb.com/) for persistence, but in our code we will primarily interface with [Mongoose](http://mongoosejs.com/), a higher-level object modeling tool which is backed by MongoDB.
 
@@ -66,7 +66,7 @@
 
 .step(data-title='Dealing with Passwords', data-file='models/User.js', data-highlight='42-62')
   :markdown
-    ### Dealing with Passwords
+    ## Dealing with Passwords
 
     You never want to store a user's password in clear text in the database. Before writing the password to MongoDB, we need to hash that value.
 
@@ -78,7 +78,7 @@
 
 .step(data-title='Adding New Routes', data-file='controllers/router.js', data-highlight='9-11')
   :markdown
-    ### Adding New Routes
+    ## Adding New Routes
 
     In an [Express](http://expressjs.com/) application, you define JavaScript functions to handle HTTP requests to different URLS (routes) in your application. Here, we add a route for a `GET` request to render the new user form, and a `POST` route to handle the form submission.
 
@@ -86,14 +86,14 @@
 
 .step(data-title='Rendering the New User Form', data-file='controllers/users.js', data-highlight='3-10')
   :markdown
-    ### Rendering the New User Form
+    ## Rendering the New User Form
 
     This function will handle a request to render the sign-up form for the application. We generate the HTML for this form using a [Jade template](http://jade-lang.com). This and all the other HTML templates for the application are found in the `views` directory at the top level of the project. We render the template with some context data to insert into it, including any [flash](https://github.com/jaredhanson/connect-flash) messages that might be present after an HTTP redirect.
 
     Let's go over the Jade template for the form next.
 .step(data-title='The Form Template', data-file='views/users/create.jade', data-language='jade')
   :markdown
-    ### The Form Template
+    ## The Form Template
 
     This is the Jade template used to render the sign-up form. It [extends the layout](http://jade-lang.com/reference/inheritance/) that already existed in the [starter project we forked to create this app](https://github.com/TwilioDevEd/starter-node-express), so I can insert content, styles, and scripts specific to this page.
 
@@ -103,7 +103,7 @@
 
 .step(data-title='Creating the User', data-file='controllers/users.js', data-highlight='12-50')
   :markdown
-    ### Creating the User
+    ## Creating the User
 
     Back on the server, we create a new instance of a `User` model from the form data submitted by the user. If there's an error when we save the user, we need to store a flash message on the session and redirect back to the form so the user can try again.
 

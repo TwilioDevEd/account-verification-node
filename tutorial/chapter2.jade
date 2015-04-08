@@ -1,6 +1,6 @@
 .step(data-title='Sending a One-Time Password', data-file="config.js")
   :markdown
-    ### User Story: Sending a One-Time Password
+    ## User Story: Sending a One-Time Password
 
     <blockquote>As an authentication system, I want to send a one-time password to a user's mobile phone to verify their possession of that phone number.</blockquote>
 
@@ -14,7 +14,7 @@
 
 .step(data-title="Configuring Authy", data-file="config.js", data-highlight="24-26")
   :markdown
-    ### Configuring Authy
+    ## Configuring Authy
 
     In `config.js`, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.
 
@@ -27,7 +27,7 @@
 
 .step(data-title='Create an Authy Client', data-file='models/User.js', data-highlight='3-7')
   :markdown
-    ### Create an Authy Client
+    ## Create an Authy Client
 
     When the `User` CommonJS module is loaded, we create an instance of the Authy API client (using a production key) all instances of a `User` can share.  When we need to send or verify a one-time password, we'll use this single API client instance.
 
@@ -36,7 +36,7 @@
 
 .step(data-title='Send a Verification Token', data-file='models/User.js', data-highlight='73-101')
   :markdown
-    ### Send a Verification Token
+    ## Send a Verification Token
 
     When it comes time to actually send the user a verification code, we do that in our model function here.
 
@@ -48,7 +48,7 @@
 
 .step(data-title='Sending a Token on Account Creation', data-file='controllers/users.js', data-highlight='37-47')
   :markdown
-    ### Sending a Token on Account Creation
+    ## Sending a Token on Account Creation
 
     When our user is created successfully via the form we implemented for the last story, we send a token to the user's mobile phone to verify their account in our controller.  When the code is sent, we redirect to another page where the user can enter the token they were sent, completing the verification process.
 

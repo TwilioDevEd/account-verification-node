@@ -1,6 +1,6 @@
 .step(data-title='Re-send the One-Time Password', data-file="views/users/verify.jade", data-language='jade')
   :markdown
-    ### User Story: Re-send the One-Time Password
+    ## User Story: Re-send the One-Time Password
 
     <blockquote>As a user, I want to click a link on the code verification page to re-send my code if I don't receive it on my phone.</blockquote>
 
@@ -13,7 +13,7 @@
 
 .step(data-title="Re-Send Code Form", data-file="views/users/verify.jade", data-highlight="20-22", data-language='jade')
   :markdown
-    ### Re-send Code Form
+    ## Re-send Code Form
 
     Here, we provide a form with no fields that submits a `POST` request to our back end, requesting that a new code be sent to the current user.
 
@@ -21,7 +21,7 @@
 
 .step(data-title='Re-sending The Code', data-file='controllers/users.js', data-highlight='65-93')
   :markdown
-    ### Re-sending the Code
+    ## Re-sending the Code
 
     This controller function loads the `User` model associated with the request and then uses the same instance function we defined earlier to resend the code. Pretty straightforward!
 
