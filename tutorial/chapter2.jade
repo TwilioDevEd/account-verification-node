@@ -1,9 +1,7 @@
 .step(data-title='Sending a One-Time Password', data-file="config.js")
+  h2 User Story: Sending a One-Time Password
+  blockquote As an authentication system, I want to send a one-time password to a user's mobile phone to verify their possession of that phone number.
   :markdown
-    ## User Story: Sending a One-Time Password
-
-    <blockquote>As an authentication system, I want to send a one-time password to a user's mobile phone to verify their possession of that phone number.</blockquote>
-
     This story covers a process that is invisible to the end user but necessary to power our account verification functionality. After a new user is created, the application needs to send a one-time password to that user's phone to validate the number (and the account). Here's what needs to get done:
 
     * Create and configure an Authy API client
