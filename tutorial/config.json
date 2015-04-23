@@ -1,6 +1,7 @@
 
 {
     "title": "Account Verification",
+    "description": "Learn to implement account verification in your web app with Twilio-powered Authy. Account verification helps you ensure your customer data is accurate and secure. This tutorial will show you the code to make it happen.",
     "repo": "TwilioDevEd/account-verification-node",
     "heroku": true
 }
