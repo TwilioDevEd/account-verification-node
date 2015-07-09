@@ -6,10 +6,9 @@ RUN mkdir -p /usr/src/app
 
 COPY . /usr/src/app
 WORKDIR /usr/src/app
+
 RUN npm install
 
 EXPOSE 3000
 
 CMD [ "npm", "start" ]
-
-# set TWILIO_NUMBER, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, MONGO_URL, AUTHY_API_KEY
