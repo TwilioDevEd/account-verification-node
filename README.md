@@ -61,6 +61,11 @@ You can then visit the application at [http://localhost:3000/](http://localhost:
 
 To stop your containers, run `docker-compose stop`.
 
+To quickly run this application locally, execute the following command in your terminal:
+```
+curl https://raw.githubusercontent.com/TwilioDevEd/account-verification-node/dockerize/docker-compose-demo.yml | bash
+```
+
 ## License
 
 MIT
