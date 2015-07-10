@@ -57,6 +57,9 @@ Finally, run the following commands to start your Docker containers:
 $ docker-compose up -d
 ```
 
+Warning: If you previously ran  ```npm install``` locally, the node_modules folder will conflict with the file structure of the container when you run the above command. 
+We recommended installing your node dependencies one folder up from the rest of your source code. 
+
 You can then visit the application at [http://localhost:3000/](http://localhost:3000/). If you're using [boot2docker](https://docs.docker.com/installation/mac/) to run Docker on OS X, you'll need to use the value of `boot2docker ip` instead of `localhost`.
 
 To stop your containers, run `docker-compose stop`.
