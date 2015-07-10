@@ -1,0 +1,18 @@
+# docker-compose configuration file for account-verification-node
+
+web:
+  build: .
+  ports:
+    - "3000:3000"
+  links:
+    - mongo
+  volumes:
+    - .:/usr/src/app
+  environment:
+    - TWILIO_ACCOUNT_SID
+    - TWILIO_AUTH_TOKEN
+    - TWILIO_NUMBER
+    - AUTHY_API_KEY
+
+mongo:
+  image: mongo:3.0
