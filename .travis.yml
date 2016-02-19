@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+- '5.0.0'
+- '4.0.0'
+install:
+- npm install
+services: mongodb
+env:
+  global:
+    - export TWILIO_ACCOUNT_SID=Your-Account-SID
+    - export TWILIO_AUTH_TOKEN=Your-Twilio-Auth-Token
+    - export TWILIO_NUMBER=Your-Twilio-Number
