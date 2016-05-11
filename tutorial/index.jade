@@ -1,10 +1,286 @@
 .chapter(data-title='Register a User')
-  include chapter1
-.chapter(data-title='Send a One-Time Code')
-  include chapter2
-.chapter(data-title='Verify the Code')
-  include chapter3
-.chapter(data-title='Resend the Code')
-  include chapter4
-.chapter(data-title='Confirm Account Creation')
-  include chapter5
+  .step(data-title='Introduction')
+    :markdown
+      ## User Account Verification
+
+      Ready to implement user account verification in your application? Here's how it works at a high level:
+
+      1. The user begins the registration process by entering their data, including a phone number, into a signup form
+
+      1. The authentication system sends a one-time password to the user's mobile phone to verify their possession of that phone number
+
+      1. The user enters the one-time password into a form before completing registeration
+
+      1. The user sees a success page and receives an SMS indicating that their account has been created
+
+      ## Building Blocks
+
+      To get this done, you'll be working with the following Twilio-powered APIs:
+
+      **Authy REST API**
+
+      * [Users Resource](https://docs.authy.com/#section-Enabling_two-factor_on_a_user): You will need to create Authy users to send and verify one-time passwords with them.
+      * [SMS Resource](https://docs.authy.com/#section-Text_Messages): We will ask Authy to send one-time passwords to our user via SMS
+      * [Verify Resource](https://docs.authy.com/#section-Verifying_a_token): Used to verify tokens entered by the user in our web form during registration
+
+      **Twilio REST API**
+      * [Messages Resource](/docs/api/rest/sending-sms): We will use Twilio directly to send our user a confirmation message after they create an account
+
+      Let's get started! Click the right arrow to move on to the next step of the tutorial.
+
+  .step(data-title="About This Tutorial")
+    :markdown
+      ## About This Tutorial
+
+      In this tutorial, we will be working through a series of [user stories](http://en.wikipedia.org/wiki/User_story) that describe how to fully implement account verification in a web application. Our team implemented this example application in about 12 story points (roughly equivalent to 12 working hours).
+
+      Let's get started with our first user story around creating a new user account.
+
+
+  .step(data-title='Registering a User Account', data-file='models/User.js', data-highlight='')
+    h2 User Story: Registering an Account
+    blockquote As a user, I want to register for a new user account with my e-mail, full name, mobile phone number, and a password.
+    :markdown
+      To do account verification, you definitely need to start with an account! This story requires that we create a bit of UI and a model object to create and save a new `User` in our system. At a high level, here's what we will need to add:
+
+      * A form to enter details about the new user
+      * A route and controller function on the server to render the form
+      * A route and controller function on the server to handle the form POST request
+      * A persistent `User` model object to store information about the user
+
+      Let's begin looking at the implementation for this story at the model level, where we decide what information we want to store about our user.
+
+  .step(data-title='Registering a User Account', data-file='models/User.js', data-highlight='12-40')
+    :markdown
+      ## Defining the User Model
+
+      Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the `User` model in the [2FA tutorial](/docs/howto/walkthrough/two-factor-authentication/node/express) that uses Authy as well. This application uses [MongoDB](http://www.mongodb.com/) for persistence, but in our code we will primarily interface with [Mongoose](http://mongoosejs.com/), a higher-level object modeling tool which is backed by MongoDB.
+
+      You define the properties of a model object in Mongoose with a [Schema](http://mongoosejs.com/docs/guide.html). To satisfy this user story, we need to add a few properties to this model, like an e-mail address, full name, and a Boolean flag indicating whether or not this account has been verified.  When you create a Mongoose [Model](http://mongoosejs.com/docs/models.html) based on this schema, that model object will allow you to create, save, and delete objects with this set of properties.
+
+      You'll notice an `authyId` property on the model - [this is required to support integration with the Authy API](https://docs.authy.com/#section-Enabling_two-factor_on_a_user). We won't use this property right away, but we'll need it later for the Authy integration.
+
+      One of the properties on the `User` model, per the user story, is a password (we'll probably want that later to log a user in, even though it's not in scope for this tutorial). Since passwords are sensitive data, they require some special handling - let's look at how to do that next.
+
+  .step(data-title='Dealing with Passwords', data-file='models/User.js', data-highlight='42-62')
+    :markdown
+      ## Dealing with Passwords
+
+      You never want to store a user's password in clear text in the database. Before writing the password to MongoDB, we need to hash that value.
+
+      A decent place to handle that step in a Mongoose model is a [middleware function](http://mongoosejs.com/docs/middleware.html) that executes before the model is saved, as you see here.
+
+      That's all we really need at the model level for now - we just need to be able to create and save a new User model, without storing the password in clear text.
+
+      Now we're ready to move up to the controller level of the application, starting with the HTTP request routes I'll need.
+
+  .step(data-title='Adding New Routes', data-file='controllers/router.js', data-highlight='9-11')
+    :markdown
+      ## Adding New Routes
+
+      In an [Express](http://expressjs.com/) application, you define JavaScript functions to handle HTTP requests to different URLS (routes) in your application. Here, we add a route for a `GET` request to render the new user form, and a `POST` route to handle the form submission.
+
+      The router delegates the actual handling of these routes to a separate controller module - let's peek at that next.
+
+  .step(data-title='Rendering the New User Form', data-file='controllers/users.js', data-highlight='3-10')
+    :markdown
+      ## Rendering the New User Form
+
+      This function will handle a request to render the sign-up form for the application. We generate the HTML for this form using a [Jade template](http://jade-lang.com). This and all the other HTML templates for the application are found in the `views` directory at the top level of the project. We render the template with some context data to insert into it, including any [flash](https://github.com/jaredhanson/connect-flash) messages that might be present after an HTTP redirect.
+
+      Let's go over the Jade template for the form next.
+
+  .step(data-title='The Form Template', data-file='views/users/create.jade', data-language='jade')
+    :markdown
+      ## The Form Template
+
+      This is the Jade template used to render the sign-up form. It [extends the layout](http://jade-lang.com/reference/inheritance/) that already existed in the [starter project we forked to create this app](https://github.com/TwilioDevEd/starter-node-express), so I can insert content, styles, and scripts specific to this page.
+
+      To create a nice country code dropdown menu for the user's mobile phone, we include CSS and JavaScript for [Authy's form helpers](https://github.com/authy/authy-form-helpers). We also include a tiny bit of JavaScript to reset the [Bootstrap](http://getbootstrap.com/) styles we're using on the country code form field after Authy changes it. Otherwise it doesn't quite match the rest of the form.
+
+      Other than that, we have a pretty standard HTML form which submits a `POST` request to the `/user` route we set up earlier. Let's jump back down to the controller for the last step of implementing this user story, which is creating the user from these form inputs.
+
+  .step(data-title='Creating the User', data-file='controllers/users.js', data-highlight='12-50')
+    :markdown
+      ## Creating the User
+
+      Back on the server, we create a new instance of a `User` model from the form data submitted by the user. If there's an error when we save the user, we need to store a flash message on the session and redirect back to the form so the user can try again.
+
+      If the `User` is saved successfully, then we're all set for this user story! Of course, there's more going on inside this controller function after the user is saved, but all that code is added as a part of our next user story. Let's check that out right now!
+
+
+  .step(data-title='Sending a One-Time Password', data-file="config.js")
+    h2 User Story: Sending a One-Time Password
+    blockquote As an authentication system, I want to send a one-time password to a user's mobile phone to verify their possession of that phone number.
+    :markdown
+      This story covers a process that is invisible to the end user but necessary to power our account verification functionality. After a new user is created, the application needs to send a one-time password to that user's phone to validate the number (and the account). Here's what needs to get done:
+
+      * Create and configure an Authy API client
+      * Modify the controller to send a one-time password after the user is created
+      * Add an instance method to the `User` model to send a one-time password, using Authy, to the phone number associated with it
+
+      Let's begin by modifying the app's configuration to contain our Authy API key.
+
+  .step(data-title="Configuring Authy", data-file="config.js", data-highlight="24-26")
+    :markdown
+      ## Configuring Authy
+
+      In `config.js`, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.
+
+      Now, we need our Authy production key ([sign up for Authy here](https://dashboard.authy.com/signup)). When you create an Authy application, the production key is found on the dashboard:
+
+      ![Authy Dashboard](//s3.amazonaws.com/howtodocs/2fa-authy-dashboard.png)
+
+      Next, we need to jump over to the `User` model to configure the Authy client and create an instance method to send a one-time password.
+
+  .step(data-title='Create an Authy Client', data-file='models/User.js', data-highlight='3-7')
+    :markdown
+      ## Create an Authy Client
+
+      When the `User` CommonJS module is loaded, we create an instance of the Authy API client (using a production key) all instances of a `User` can share.  When we need to send or verify a one-time password, we'll use this single API client instance.
+
+      Now let's see where we use the client to send the one-time password necessary for our verification step.
+
+  .step(data-title='Send a Verification Token', data-file='models/User.js', data-highlight='73-101')
+    :markdown
+      ## Send a Verification Token
+
+      When it comes time to actually send the user a verification code, we do that in our model function here.
+
+      Before sending the code, an [Authy user](https://docs.authy.com/#section-Enabling_two-factor_on_a_user) needs to exist as a pair for our `User` model in the database.  If the `authyId` for our user instance hasn't been set, we use the Authy API client to create an associated Authy user and store that ID in our database.
+
+      Once the user has an `authyId`, we can actually send a verification code to that user's mobile phone.
+
+      That's it for the model in this story - let's jump back to the controller to see where this model function is called.
+
+  .step(data-title='Sending a Token on Account Creation', data-file='controllers/users.js', data-highlight='37-47')
+    :markdown
+      ## Sending a Token on Account Creation
+
+      When our user is created successfully via the form we implemented for the last story, we send a token to the user's mobile phone to verify their account in our controller.  When the code is sent, we redirect to another page where the user can enter the token they were sent, completing the verification process.
+
+      Let's check out the code for that next!
+
+  .step(data-title='Verify the One-Time Password', data-file="views/users/verify.jade", data-language='jade')
+    h2 User Story: Verify the One-Time Password
+    blockquote As a user, I want to enter the one-time password sent to my mobile phone from the authentication system before I complete the signup process.
+    :markdown
+      This story covers the next user-facing step of the verification process, where they enter the code we sent them to verify their possession of the phone number they gave us. Here's what needs to get done to complete this story:
+
+      * Create a form to allow the user to enter the one-time password they were sent
+      * Create routes and controllers to both display the form and handle the submission of the one-time password
+      * Add an instance method to the `User` model to verify the one-time code that was entered using the Authy client
+
+      The route definition in `controllers/router.js` is pretty much the same as the first story, so we'll skip that bit here. Let's begin instead with the verification form, which is created with the Jade code you see here.
+
+  .step(data-title="The Verification Form", data-file="views/users/verify.jade", data-highlight="13-18", data-language='jade')
+    :markdown
+      ## The Verification Form
+
+      This page actually has two forms, but we'll focus on the first one first. It has only a single field for the verification code, which we'll submit to the server for validation.
+
+  .step(data-title='Verifying the Code: Controller', data-file='controllers/users.js', data-highlight='95-147')
+    :markdown
+      ## Verifying the Code: Controller
+
+      This controller function handles the form submission. It's a little longer than the others, but it has a lot to do. It needs to:
+
+      * Load a `User` model for the current verification request
+      * Use an instance function on the model object to verify the code that was entered by the user
+      * If the code entered was valid, flip a boolean flag on the user model to indicate the account was verified
+
+      Let's look at the `User` model to check out the instance method that handles verifying the code with Authy next.
+
+  .step(data-title='Verifying the Code: Model', data-file='models/User.js', data-highlight='103-109')
+    :markdown
+      ## Verifying the Code: Model
+
+      This instance function is a thin wrapper around the Authy client function that sends in a candidate password to be verified. We call Authy, and then immediately call a passed callback function with the result.
+
+      That's all for this story! However, our verification form wouldn't be very usable if there wasn't a way to resend a verification code if the message didn't arrive at the end user's handset for whatever reason.  Let's tackle the user story to resend the code next.
+
+  .step(data-title='Re-send the One-Time Password', data-file="views/users/verify.jade", data-language='jade')
+    h2 User Story: Re-send the One-Time Password
+    blockquote As a user, I want to click a link on the code verification page to re-send my code if I don't receive it on my phone.
+    :markdown
+      This story covers the case where an end user did not receive their verification code for some reason. Here's what needs to get done to complete this story:
+
+      * Create a form that requests that a new one-time password be sent to a user
+      * Create a controller function to handle that form submission and re-send the code
+
+      You might recall there were actually two forms on the Jade template we looked at earlier. Let's look at that second one now.
+
+  .step(data-title="Re-Send Code Form", data-file="views/users/verify.jade", data-highlight="20-22", data-language='jade')
+    :markdown
+      ## Re-send Code Form
+
+      Here, we provide a form with no fields that submits a `POST` request to our back end, requesting that a new code be sent to the current user.
+
+      Let's look at the controller which handles this form next.
+
+  .step(data-title='Re-sending The Code', data-file='controllers/users.js', data-highlight='65-93')
+    :markdown
+      ## Re-sending the Code
+
+      This controller function loads the `User` model associated with the request and then uses the same instance function we defined earlier to resend the code. Pretty straightforward!
+
+      To wrap things up, let's implement our last user story where we confirm for the user that their account has been verified with a text message and a success page.
+
+  .step(data-title='Confirm Account Creation', data-file="controllers/users.js")
+    h2 User Story: Confirm Account Creation
+    blockquote As a user, I want to view a success page and receive a text message indicating that my account has been created successfully.
+    :markdown
+      This story completes the account verification use case by indicating to the user that their account has been created and verified successfully. To implement this story, we need to:
+
+      * Display a page that indicates that the user account has been created and verified successfully
+      * Send a text message to the user's phone indicating their account has been verified
+
+      Let's begin by looking at the controller.
+
+  .step(data-title="Show User Details Page", data-file="controllers/users.js", data-highlight="149-167")
+    :markdown
+      ## Show User Details Page
+
+      This controller function renders a Jade template that contains the user's full name, and indicates whether or not they are verified by checking the user's `verified` property.
+
+      This should suffice for confirmation in the browser that the user has been verified. Let's see how we might send that text message next.
+
+  .step(data-title='Configuring Twilio', data-file='config.js', data-highlight='10-22')
+    :markdown
+      ## Configuring Twilio
+
+      Authy is awesome for abstracting SMS and handling 2FA and account verification, but we can't use it to send arbitrary text messages. Let's use the Twilio API directly to do that!
+
+      But first, we need to configure out Twilio account. We'll need three things:
+
+      * Our Twilio account SID
+      * Our Twilio auth token
+      * A Twilio number in our account that can send text messages
+
+      After including these values in our app's config file, we're ready to move into the `User` model and create an instance function to send a message to the user's phone.
+
+  .step(data-title='Sending a Message: Creating a Twilio Client', data-file='models/User.js', data-highlight='3-7')
+    :markdown
+      ## Sending a Message: Creating a Twilio Client
+
+      Much as we did for our Authy client, we create a single instance of the Twilio REST API helper that all instances of our `User` model can use.
+
+  .step(data-title='Sending a Message: Using the Twilio Client', data-file='models/User.js', data-highlight='111-121')
+    :markdown
+      ## Sending a Message: Using the Twilio Client
+
+      Here, we add another instance function to the model that will send a text message to the user's configured phone number. Rather than just being a one-time password, this can be anything we wish.
+
+      Let's finish up in the controller, where we actually use this functionality.
+
+  .step(data-title='Sending a Message: Updating the Controller', data-file='controllers/users.js', data-highlight='121-140')
+    :markdown
+      ## Sending a Message: Updating the Controller
+
+      In the controller, after a new user has been successfully verified, we use `sendMessage` to deliver them the happy news! 
+
+      ## All Done
+
+      And with that, we've implemented account verification in our Node.js application! Be sure to check out the project buttons above to download the source for this application, view it on GitHub, or deploy it to Heroku to see it in action for yourself.
+
+      We'd also love to hear your feedback on this tutorial - [please reach out to us](mailto:help@twilio.com) with any questions you might have.  Thanks for checking out the tutorial!
