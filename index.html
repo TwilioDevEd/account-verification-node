@@ -16,18 +16,18 @@
 </li>
 <li><p>The authentication system sends a one-time password to the user&#39;s mobile phone to verify their possession of that phone number</p>
 </li>
-<li><p>The user enters the one-time password into a form before completing registeration</p>
+<li><p>The user enters the one-time password into a form before completing registration</p>
 </li>
 <li><p>The user sees a success page and receives an SMS indicating that their account has been created</p>
 </li>
 </ol>
-<h2 id="building-blocks">Building Blocks</h2>
+</div><div data-title="Bulding Blocks" class="step"><h2 id="building-blocks">Building Blocks</h2>
 <p>To get this done, you&#39;ll be working with the following Twilio-powered APIs:</p>
 <p><strong>Authy REST API</strong></p>
 <ul>
-<li><a href="https://docs.authy.com/#section-Enabling_two-factor_on_a_user">Users Resource</a>: You will need to create Authy users to send and verify one-time passwords with them.</li>
-<li><a href="https://docs.authy.com/#section-Text_Messages">SMS Resource</a>: We will ask Authy to send one-time passwords to our user via SMS</li>
-<li><a href="https://docs.authy.com/#section-Verifying_a_token">Verify Resource</a>: Used to verify tokens entered by the user in our web form during registration</li>
+<li><a href="//docs.authy.com/#section-Enabling_two-factor_on_a_user">Users Resource</a>: You will need to create Authy users to send and verify one-time passwords with them.</li>
+<li><a href="//docs.authy.com/#section-Text_Messages">SMS Resource</a>: We will ask Authy to send one-time passwords to our user via SMS</li>
+<li><a href="//docs.authy.com/#section-Verifying_a_token">Verify Resource</a>: Used to verify tokens entered by the user in our web form during registration</li>
 </ul>
 <p><strong>Twilio REST API</strong></p>
 <ul>
@@ -36,21 +36,25 @@
 <p>Let&#39;s get started! Click the right arrow to move on to the next step of the tutorial.</p>
 </div><div data-title="Registering a User Account" data-file="models/User.js" data-highlight="12-40" class="step"><h2 id="the-user-model">The User Model</h2>
 <p>Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the <code>User</code> model in the <a href="/docs/howto/walkthrough/two-factor-authentication/node/express">2FA tutorial</a> that uses Authy as well. This application uses <a href="http://www.mongodb.com/">MongoDB</a> for persistence, but in our code we will primarily interface with <a href="http://mongoosejs.com/">Mongoose</a>, a higher-level object modeling tool which is backed by MongoDB.</p>
-<p>You&#39;ll notice an <code>authyId</code> property on the model - <a href="https://docs.authy.com/#section-Enabling_two-factor_on_a_user">this is required to support integration with the Authy API</a>. We won&#39;t use this property right away, but we&#39;ll need it later for the Authy integration.</p>
+<p>You&#39;ll notice an <code>authyId</code> property on the model - <a href="//docs.authy.com/#section-Enabling_two-factor_on_a_user">this is required to support integration with the Authy API</a>. We won&#39;t use this property right away, but we&#39;ll need it later for the Authy integration.</p>
 <p>One of the properties on the <code>User</code> model, per the user story, is a password (we&#39;ll probably want that later to log a user in, even though it&#39;s not in scope for this tutorial).</p>
 </div><div data-title="The Form Template" data-file="views/users/create.jade" data-language="jade" class="step"><h2 id="the-form-template">The Form Template</h2>
 <p>When we create a new user, we ask for a name, e-mail address, and a password. 
 In order to validate their account we also ask them for a mobile number with a country code. 
 We use Authy to send them a one-time password via SMS to this phone number.</p>
-<p>Now the user is logged in but not verified. In the next steps we&#39;ll learn how to verify the user using authy.</p>
+<p>Now the user is logged in but not verified. In the next steps we&#39;ll learn how to verify the user using Authy.</p>
+<p><strong>See Also:</strong></p>
+<ul>
+<li><a href="//jade-lang.com/">Jade</a></li>
+</ul>
 </div><div data-title="Configuring Authy" data-file="config.js" data-highlight="24-26" class="step"><h2 id="configuring-authy">Configuring Authy</h2>
 <p>In <code>config.js</code>, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.</p>
-<p>Now, we need our Authy production key (<a href="https://dashboard.authy.com/signup">sign up for Authy here</a>). When you create an Authy application, the production key is found on the dashboard:</p>
+<p>Now, we need our Authy production key (<a href="//dashboard.authy.com/signup">sign up for Authy here</a>). When you create an Authy application, the production key is found on the dashboard:</p>
 <p><img src="//s3.amazonaws.com/howtodocs/2fa-authy-dashboard.png" alt="Authy Dashboard"></p>
 <p>Next, we need to jump over to the <code>User</code> model to configure the Authy client and create an instance method to send a one-time password.</p>
 </div><div data-title="Send a Verification Token" data-file="models/User.js" data-highlight="73-101" class="step"><h2 id="send-a-verification-token">Send a Verification Token</h2>
 <p>When it comes time to actually send the user a verification code, we do that in our model function here.</p>
-<p>Before sending the code, an <a href="https://docs.authy.com/#section-Enabling_two-factor_on_a_user">Authy user</a> needs to exist as a pair for our <code>User</code> model in the database.  If the <code>authyId</code> for our user instance hasn&#39;t been set, we use the Authy API client to create an associated Authy user and store that ID in our database.</p>
+<p>Before sending the code, an <a href="//docs.authy.com/#section-Enabling_two-factor_on_a_user">Authy user</a> needs to exist as a pair for our <code>User</code> model in the database.  If the <code>authyId</code> for our user instance hasn&#39;t been set, we use the Authy API client to create an associated Authy user and store that ID in our database.</p>
 <p>Once the user has an <code>authyId</code>, we can actually send a verification code to that user&#39;s mobile phone.</p>
 <hr>
 <p><strong>See Also:</strong></p>
@@ -83,7 +87,7 @@ been verified with a text message and a success page.</p>
 <hr>
 <p><strong>See Also:</strong></p>
 <ul>
-<li><a href="https://www.twilio.com/docs/api/rest">Twilio Rest API Documentation</a></li>
+<li><a href="//www.twilio.com/docs/api/rest">Twilio Rest API Documentation</a></li>
 <li><a href="//www.twilio.com/docs/api/rest/sending-messages">Sending SMS With the API</a></li>
 </ul>
 </div><div data-title="Where to Next?" class="step"><h2 id="where-to-next-">Where to Next?</h2>
@@ -93,7 +97,7 @@ confirm their phone number. If you&#39;re a Node developer working with Twilio,
 you might want to check out these other tutorials:</p>
 <p><a href="//www.twilio.com/docs/tutorials/walkthrough/click-to-call/node/express"><strong>Click-To-Call</strong></a></p>
 <p>Put a button on your web page that connects visitors to live support or sales people via telephone.</p>
-<p><a href="//https://www.twilio.com/docs/tutorials/walkthrough/automated-survey/node/express"><strong>Automated Survey</strong></a></p>
+<p><a href="//www.twilio.com/docs/tutorials/walkthrough/automated-survey/node/express"><strong>Automated Survey</strong></a></p>
 <p>Instantly collect structured data from your users with a survey conducted
 over a voice call or SMS text messages.</p>
 <h3 id="did-this-help-">Did this help?</h3>
