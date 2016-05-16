@@ -94,12 +94,18 @@
 
       Let's look at the `User` model to check out the instance method that handles verifying the code with Authy next.
 
+      **See Also:**
+      * [Model#save](//mongoosejs.com/docs/api.html#model_Model-save)
+
   .step(data-title='Verifying the Code: Model', data-file='models/User.js', data-highlight='103-109')
     :markdown
       ## Verifying the Code: Model
 
       This instance function is a thin wrapper around the Authy client function that sends in a candidate password to be verified. 
       We call Authy, and then immediately call a passed callback function with the result.
+
+      **See Also:**
+      * [Authy#verify](//www.npmjs.com/package/authy#verify-token)
 
   .step(data-title='Re-sending The Code', data-file='controllers/users.js', data-highlight='65-93')
     :markdown
@@ -110,6 +116,9 @@
       To wrap things up, let's implement the last step where we confirm that the user's account has
       been verified with a text message and a success page.
 
+      **See Also:**
+      * [Connect Flash Middleware](https://github.com/jaredhanson/connect-flash#connect-flash)
+
   .step(data-title="Show User Details Page", data-file="controllers/users.js", data-highlight="149-167")
     :markdown
       ## Show User Details Page
@@ -117,6 +126,9 @@
       This controller function renders a Jade template that contains the user's full name, and indicates whether or not they are verified by checking the user's `verified` property.
 
       This should suffice for confirmation in the browser that the user has been verified. Let's see how we might send that text message next.
+
+      **See Also:**
+      * [Model#findById](//mongoosejs.com/docs/api.html#model_Model.findById)
 
   .step(data-title='Sending a Message: Using the Twilio Client', data-file='models/User.js', data-highlight='111-121')
     :markdown
