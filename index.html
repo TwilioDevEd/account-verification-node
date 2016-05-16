@@ -45,7 +45,7 @@ We use Authy to send them a one-time password via SMS to this phone number.</p>
 <p>Now the user is logged in but not verified. In the next steps we&#39;ll learn how to verify the user using Authy.</p>
 <p><strong>See Also:</strong></p>
 <ul>
-<li><a href="//jade-lang.com/">Jade</a></li>
+<li><a href="//jade-lang.com/">Jade Template Engine</a></li>
 </ul>
 </div><div data-title="Configuring Authy" data-file="config.js" data-highlight="24-26" class="step"><h2 id="configuring-authy">Configuring Authy</h2>
 <p>In <code>config.js</code>, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.</p>
@@ -69,16 +69,32 @@ We use Authy to send them a one-time password via SMS to this phone number.</p>
 <li>If the code entered was valid, flip a boolean flag on the user model to indicate the account was verified</li>
 </ul>
 <p>Let&#39;s look at the <code>User</code> model to check out the instance method that handles verifying the code with Authy next.</p>
+<p><strong>See Also:</strong></p>
+<ul>
+<li><a href="//mongoosejs.com/docs/api.html#model_Model-save">Model#save</a></li>
+</ul>
 </div><div data-title="Verifying the Code: Model" data-file="models/User.js" data-highlight="103-109" class="step"><h2 id="verifying-the-code-model">Verifying the Code: Model</h2>
 <p>This instance function is a thin wrapper around the Authy client function that sends in a candidate password to be verified. 
 We call Authy, and then immediately call a passed callback function with the result.</p>
+<p><strong>See Also:</strong></p>
+<ul>
+<li><a href="//www.npmjs.com/package/authy#verify-token">Authy#verify</a></li>
+</ul>
 </div><div data-title="Re-sending The Code" data-file="controllers/users.js" data-highlight="65-93" class="step"><h2 id="re-sending-the-code">Re-sending the Code</h2>
 <p>This controller function loads the <code>User</code> model associated with the request and then uses the same instance function we defined earlier to resend the code. Pretty straightforward!</p>
 <p>To wrap things up, let&#39;s implement the last step where we confirm that the user&#39;s account has
 been verified with a text message and a success page.</p>
+<p><strong>See Also:</strong></p>
+<ul>
+<li><a href="https://github.com/jaredhanson/connect-flash#connect-flash">Connect Flash Middleware</a></li>
+</ul>
 </div><div data-title="Show User Details Page" data-file="controllers/users.js" data-highlight="149-167" class="step"><h2 id="show-user-details-page">Show User Details Page</h2>
 <p>This controller function renders a Jade template that contains the user&#39;s full name, and indicates whether or not they are verified by checking the user&#39;s <code>verified</code> property.</p>
 <p>This should suffice for confirmation in the browser that the user has been verified. Let&#39;s see how we might send that text message next.</p>
+<p><strong>See Also:</strong></p>
+<ul>
+<li><a href="//mongoosejs.com/docs/api.html#model_Model.findById">Model#findById</a></li>
+</ul>
 </div><div data-title="Sending a Message: Using the Twilio Client" data-file="models/User.js" data-highlight="111-121" class="step"><h2 id="sending-a-message">Sending a Message</h2>
 <p>Here, we add another instance function to the model that will send a text message to the user&#39;s configured phone number. Rather than just being a one-time password, this can be anything we wish.</p>
 <p>Let&#39;s finish up in the controller, where we actually use this functionality.</p>
