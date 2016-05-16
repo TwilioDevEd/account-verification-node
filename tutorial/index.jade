@@ -9,7 +9,7 @@
 
       1. The authentication system sends a one-time password to the user's mobile phone to verify their possession of that phone number
 
-      1. The user enters the one-time password into a form before completing registeration
+      1. The user enters the one-time password into a form before completing registration
 
       1. The user sees a success page and receives an SMS indicating that their account has been created
 
@@ -47,7 +47,11 @@
       In order to validate their account we also ask them for a mobile number with a country code. 
       We use Authy to send them a one-time password via SMS to this phone number.
      
-      Now the user is logged in but not verified. In the next steps we'll learn how to verify the user using authy.
+      Now the user is logged in but not verified. In the next steps we'll learn how to verify the user using Authy.
+
+      **See Also:**
+      * [Jade](//jade-lang.com/)
+      
 
   .step(data-title="Configuring Authy", data-file="config.js", data-highlight="24-26")
     :markdown
