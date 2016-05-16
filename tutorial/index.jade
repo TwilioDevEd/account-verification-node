@@ -19,9 +19,9 @@
 
       **Authy REST API**
 
-      * [Users Resource](https://docs.authy.com/#section-Enabling_two-factor_on_a_user): You will need to create Authy users to send and verify one-time passwords with them.
-      * [SMS Resource](https://docs.authy.com/#section-Text_Messages): We will ask Authy to send one-time passwords to our user via SMS
-      * [Verify Resource](https://docs.authy.com/#section-Verifying_a_token): Used to verify tokens entered by the user in our web form during registration
+      * [Users Resource](//docs.authy.com/#section-Enabling_two-factor_on_a_user): You will need to create Authy users to send and verify one-time passwords with them.
+      * [SMS Resource](//docs.authy.com/#section-Text_Messages): We will ask Authy to send one-time passwords to our user via SMS
+      * [Verify Resource](//docs.authy.com/#section-Verifying_a_token): Used to verify tokens entered by the user in our web form during registration
 
       **Twilio REST API**
       * [Messages Resource](/docs/api/rest/sending-sms): We will use Twilio directly to send our user a confirmation message after they create an account
@@ -35,7 +35,7 @@
       Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the `User` model in the [2FA tutorial](/docs/howto/walkthrough/two-factor-authentication/node/express) that uses Authy as well. This application uses [MongoDB](http://www.mongodb.com/) for persistence, but in our code we will primarily interface with [Mongoose](http://mongoosejs.com/), a higher-level object modeling tool which is backed by MongoDB.
 
 
-      You'll notice an `authyId` property on the model - [this is required to support integration with the Authy API](https://docs.authy.com/#section-Enabling_two-factor_on_a_user). We won't use this property right away, but we'll need it later for the Authy integration.
+      You'll notice an `authyId` property on the model - [this is required to support integration with the Authy API](//docs.authy.com/#section-Enabling_two-factor_on_a_user). We won't use this property right away, but we'll need it later for the Authy integration.
 
       One of the properties on the `User` model, per the user story, is a password (we'll probably want that later to log a user in, even though it's not in scope for this tutorial).
 
@@ -55,7 +55,7 @@
 
       In `config.js`, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.
 
-      Now, we need our Authy production key ([sign up for Authy here](https://dashboard.authy.com/signup)). When you create an Authy application, the production key is found on the dashboard:
+      Now, we need our Authy production key ([sign up for Authy here](//dashboard.authy.com/signup)). When you create an Authy application, the production key is found on the dashboard:
 
       ![Authy Dashboard](//s3.amazonaws.com/howtodocs/2fa-authy-dashboard.png)
 
@@ -67,7 +67,7 @@
 
       When it comes time to actually send the user a verification code, we do that in our model function here.
 
-      Before sending the code, an [Authy user](https://docs.authy.com/#section-Enabling_two-factor_on_a_user) needs to exist as a pair for our `User` model in the database.  If the `authyId` for our user instance hasn't been set, we use the Authy API client to create an associated Authy user and store that ID in our database.
+      Before sending the code, an [Authy user](//docs.authy.com/#section-Enabling_two-factor_on_a_user) needs to exist as a pair for our `User` model in the database.  If the `authyId` for our user instance hasn't been set, we use the Authy API client to create an associated Authy user and store that ID in our database.
 
       Once the user has an `authyId`, we can actually send a verification code to that user's mobile phone.
 
@@ -126,7 +126,7 @@
       ---
 
       **See Also:**
-      * [Twilio Rest API Documentation](https://www.twilio.com/docs/api/rest)
+      * [Twilio Rest API Documentation](//www.twilio.com/docs/api/rest)
       * [Sending SMS With the API](//www.twilio.com/docs/api/rest/sending-messages)
 
   .step(data-title='Where to Next?')
@@ -143,7 +143,7 @@
 
       Put a button on your web page that connects visitors to live support or sales people via telephone.
 
-      [**Automated Survey**](//https://www.twilio.com/docs/tutorials/walkthrough/automated-survey/node/express)
+      [**Automated Survey**](//www.twilio.com/docs/tutorials/walkthrough/automated-survey/node/express)
 
       Instantly collect structured data from your users with a survey conducted
       over a voice call or SMS text messages.
