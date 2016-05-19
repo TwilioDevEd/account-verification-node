@@ -56,9 +56,9 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 
 1. Finally, run the following commands to start your Docker containers.
 
-```
-$ docker-compose up -d
-```
+   ```
+   $ docker-compose up -d
+   ```
 
 1. Check it out at [http://localhost:3000](http://localhost:3000).
 
