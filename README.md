@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/TwilioDevEd/warm-transfer-node.svg?branch=master)](https://travis-ci.org/TwilioDevEd/warm-transfer-node)
 
-When a new user signs up for your application, you want to make sure their contact information is accurate. You'd also like some assurance they are in fact a human being! You want to make sure that every new user account in your system is an actual person you can serve.
+When a new user signs up for your application, you want to make sure their contact information is accurate. You also like to have some assurance they are in fact a human being! You want to make sure that every new user account in your system is an actual person you can serve.
 
 [View the full tutorial here](https://www.twilio.com/docs/tutorials/walkthrough/account-verification/node/express)!
 
