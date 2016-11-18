@@ -17,7 +17,7 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 1. First clone this repository and `cd` into it.
 
    ```bash
-   $ git clone git@github.com:TwilioDevEd/warm-transfer-node.git
+   $ git clone git@github.com:TwilioDevEd/account-verification-node.git
    $ cd warm-transfer-node
    ```
 
@@ -33,12 +33,6 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
    The `AUTHY_API_KEY` can be found [here](https://dashboard.authy.com/).
 
    Run `source .env` to export the environment variables.
-
-1. Make sure the tests succeed.
-
-   ```bash
-   $ npm test
-   ```
 
 1. Start the server.
 

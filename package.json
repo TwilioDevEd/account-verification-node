@@ -4,7 +4,6 @@
   "description": "Twilio and Authy powered user account verification using Node.js the Express web framework",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
     "start": "node index.js"
   },
   "repository": {
@@ -41,5 +40,7 @@
     "chai": "^2.1.0",
     "mocha": "^2.1.0"
   },
-  "engines" : { "node" : ">=4.1.0 <5.5.0" }
+  "engines": {
+    "node": ">=4.1.0 <5.5.0"
+  }
 }
