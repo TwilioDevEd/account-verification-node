@@ -29,10 +29,8 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 
    You can find your `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` in your
    [Twilio Account Settings](https://www.twilio.com/user/account/settings).
-   You will also need a `TWILIO_NUMBER`, which you may find [here](https://www.twilio.com/user/account/phone-numbers/incoming).
-   The `AUTHY_API_KEY` can be found [here](https://dashboard.authy.com/).
-
-   Run `source .env` to export the environment variables.
+   You will also need a `TWILIO_NUMBER`, which you may find in the [Twilio phone numbers console](https://www.twilio.com/user/account/phone-numbers/incoming).
+   The `AUTHY_API_KEY` can be found in the[Authy dashboard](https://dashboard.authy.com/).
 
 1. Start the server.
 
