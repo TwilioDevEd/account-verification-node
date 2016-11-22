@@ -8,11 +8,6 @@ services: mongodb
 
 env:
   global:
-    - TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    - TWILIO_AUTH_TOKEN=1a23456b78901c234a5f67a1234567bc
-    - TWILIO_NUMBER=+13362589835
-    - AUTHY_API_KEY=1a23456b78901c234a5f67a1234567bc
-    - MONGO_URL=mongodb://localhost/account-verification
     - CXX=g++-4.8
 
 addons:
