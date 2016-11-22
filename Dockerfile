@@ -1,6 +1,6 @@
 # Dockerfile for account-verification-node
 
-FROM node:0.12.4
+FROM node:4.2
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/
