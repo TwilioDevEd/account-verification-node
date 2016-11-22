@@ -1,12 +1,21 @@
 language: node_js
+
 node_js:
-- '5.0.0'
-- '4.0.0'
-install:
-- npm install
+- 'stable'
+- '4.6.2'
+
 services: mongodb
+
 env:
   global:
-    - export TWILIO_ACCOUNT_SID=Your-Account-SID
-    - export TWILIO_AUTH_TOKEN=Your-Twilio-Auth-Token
-    - export TWILIO_NUMBER=Your-Twilio-Number
+    - TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    - TWILIO_AUTH_TOKEN=1a23456b78901c234a5f67a1234567bc
+    - TWILIO_NUMBER=+13362589835
+    - CXX=g++-4.8
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
