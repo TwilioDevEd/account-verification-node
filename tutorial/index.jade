@@ -26,7 +26,7 @@
       * [Verify Resource](//docs.authy.com/#section-Verifying_a_token): Used to verify tokens entered by the user in our web form during registration
 
       **Twilio REST API**
-      * [Messages Resource](/docs/api/rest/sending-sms): We will use Twilio directly to send our user a confirmation message after they create an account
+      * [Messages Resource](//www.twilio.com/docs/api/rest/sending-sms): We will use Twilio directly to send our user a confirmation message after they create an account
 
       Let's get started! Click the right arrow to move on to the next step of the tutorial.
 
@@ -34,7 +34,7 @@
     :markdown
       ## The User Model
 
-      Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the `User` model in the [2FA tutorial](/docs/howto/walkthrough/two-factor-authentication/node/express) that uses Authy as well. This application uses [MongoDB](http://www.mongodb.com/) for persistence, but in our code we will primarily interface with [Mongoose](http://mongoosejs.com/), a higher-level object modeling tool which is backed by MongoDB.
+      Our first order of business is to create a model object for a user of our application. We will borrow a lot of the code from the `User` model in the [2FA tutorial](//docs.authy.com/docs/howto/walkthrough/two-factor-authentication/node/express) that uses Authy as well. This application uses [MongoDB](//www.mongodb.com/) for persistence, but in our code we will primarily interface with [Mongoose](//mongoosejs.com/), a higher-level object modeling tool which is backed by MongoDB.
 
 
       You'll notice an `authyId` property on the model - [this is required to support integration with the Authy API](//docs.authy.com/#section-Enabling_two-factor_on_a_user). We won't use this property right away but we'll need it later for the Authy integration.
@@ -59,7 +59,7 @@
     :markdown
       ## Configuring Authy
 
-      In `config.js`, we list configuration parameters for the application. Most are pulled in from system environment variables, which is a helpful way to access sensitive values (like API keys). This prevents us from accidentally checking them in to source control.
+      In `config.js`, we list configuration parameters for the application. Most are pulled in from a .env file, which is populated by you and excluded from the source control. This prevents us from accidentally checking them in to source control.
 
       Now, we need our Authy production key ([sign up for Authy here](//dashboard.authy.com/signup)). When you create an Authy application, the production key is found on the dashboard:
 
@@ -82,7 +82,7 @@
       **See Also:**
       * [Node Client for Authy API](//github.com/authy/node-authy)
 
-  .step(data-title='Verifying the Code: Controller', data-file='controllers/users.js', data-highlight='95-147')
+  .step(data-title='Verifying the Code: Controller', data-file='controllers/users.js', data-highlight='95-146')
     :markdown
       ## Verifying the Code: Controller
 
@@ -117,7 +117,7 @@
       been verified with a text message and a success page.
 
       **See Also:**
-      * [Connect Flash Middleware](https://github.com/jaredhanson/connect-flash#connect-flash)
+      * [Connect Flash Middleware](//github.com/jaredhanson/connect-flash#connect-flash)
 
   .step(data-title="Show User Details Page", data-file="controllers/users.js", data-highlight="149-167")
     :markdown
