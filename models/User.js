@@ -76,9 +76,9 @@ UserSchema.methods.sendAuthyToken = function(cb) {
 
     if (!self.authyId) {
         // Register this user if it's a new user
-        authy.register_user(self.email, self.phone, self.countryCode, 
+        authy.register_user(self.email, self.phone, self.countryCode,
             function(err, response) {
-                
+
             if (err || !response.user) return cb.call(self, err);
             self.authyId = response.user.id;
             self.save(function(err, doc) {
@@ -109,14 +109,18 @@ UserSchema.methods.verifyAuthyToken = function(otp, cb) {
 };
 
 // Send a text message via twilio to this user
-UserSchema.methods.sendMessage = function(message, cb) {
+UserSchema.methods.sendMessage = function(message, successCallback, errorCallback) {
     var self = this;
-    twilioClient.sendMessage({
-        to: self.countryCode+self.phone,
+    var toNumber = `+${self.countryCode}${self.phone}`;
+
+    twilioClient.messages.create({
+        to: toNumber,
         from: config.twilioNumber,
         body: message
-    }, function(err, response) {
-        cb.call(self, err);
+    }).then(function() {
+      successCallback();
+    }).catch(function(err) {
+      errorCallback(err);
     });
 };
 

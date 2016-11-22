@@ -12,7 +12,7 @@ exports.showCreate = function(request, response) {
 // create a new user based on the form submission
 exports.create = function(request, response) {
     var params = request.body;
-    
+
     // Create a new user based on form parameters
     var user = new User({
         fullName: params.fullName,
@@ -127,16 +127,14 @@ exports.verify = function(request, response) {
 
         // Send confirmation text message
         var message = 'You did it! Signup complete :)';
-        user.sendMessage(message, function(err) {
-            if (err) {
-                request.flash('errors', 'You are signed up, but '
-                    + 'we could not send you a message. Our bad :(');
-            }
-
-            // show success page
-            request.flash('successes', message);
-            response.redirect('/users/'+user._id);
-        });
+        user.sendMessage(message, function() {
+          // show success page
+          request.flash('successes', message);
+          response.redirect(`/users/${user._id}`);
+        }, function(err) {
+          request.flash('errors', 'You are signed up, but '
+              + 'we could not send you a message. Our bad :(');
+        })
     }
 
     // respond with an error
