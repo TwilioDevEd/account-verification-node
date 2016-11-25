@@ -1,45 +1,86 @@
-# User Account Verification with Node.js and Express
+<a href="https://www.twilio.com">
+  <img src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg" alt="Twilio" width="250" />
+</a>
 
-This project is demo for user account verification using [Authy](http://www.authy.com) [Express](http://www.expressjs.com) web framework.  In addition to Express, this project contains other third-party modules that may be useful in creating applications with Twilio.
+
+# User Account Verification with Node.js/Express and Twilio
+
+[![Build Status](https://travis-ci.org/TwilioDevEd/account-verification-node.svg?branch=master)](https://travis-ci.org/TwilioDevEd/account-verification-node)
+
+When a new user signs up for your application, you want to make sure their contact information is accurate. You also like to have some assurance they are in fact a human being! You want to make sure that every new user account in your system is an actual person you can serve.
+
+[View the full tutorial here](https://www.twilio.com/docs/tutorials/walkthrough/account-verification/node/express)!
 
 ## Deploy On Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/TwilioDevEd/account-verification-node)
 
-## Running the Project on Your Machine
+## Local Development
 
-To run this project on your computer, download or clone the source. You will also need to download and install either [Node.js](http://nodejs.org/) or [io.js](https://iojs.org/en/index.html), both of which should also install [npm](https://www.npmjs.com/). You will also need to [sign up for a Twilio account](https://www.twilio.com/try-twilio) if you don't have one already.
+This project is build using [Node.js](https://nodejs.org) and depends on [MongoDB](https://www.mongodb.com).
 
-### Install Dependencies
+1. First clone this repository and `cd` into it.
 
-Navigate to the project directory in your terminal and run:
+   ```bash
+   $ git clone git@github.com:TwilioDevEd/account-verification-node.git
+   $ cd account-verification-node
+   ```
 
-```bash
-npm install
-```
+1. Copy the sample configuration file and edit it to match your configuration.
 
-This should install all of our project dependencies from npm into a local `node_modules` folder.
+   ```bash
+   $ cp .env.example .env
+   ```
 
-### Configuration
+   You can find your `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` in your
+   [Twilio Account Settings](https://www.twilio.com/user/account/settings).
 
-#### Twilio
-Next, open `config.js` at the root of the project and update it with values from your environment and your [Twilio account](https://www.twilio.com/user/account/voice-messaging). You can either export these values as system environment variables (this is the default setup), or you can replace these values with hard-coded strings (be careful you don't commit them to git!).
+   You will also need a `TWILIO_NUMBER`, which you may find in the [Twilio phone numbers console](https://www.twilio.com/user/account/phone-numbers/incoming).
 
-#### Authy
-You will also need to configure your Authy production key. [Sign up for Authy](http://www.authy.com) if you haven't already, and create an application. On the dashboard for your application, you will see a "production key".  Use this key to actually see text messages sent to your phone.
+   The `AUTHY_API_KEY` can be found in the [Authy dashboard](https://dashboard.authy.com/).
 
-#### Mongoose / MongoDB
-This sample application stores data in a MongoDB database using [Mongoose](http://mongoosejs.com/). You can download and run MongoDB yourself ([OS X](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/), [Linux](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/), [Windows](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/)), or you can use a hosted service like [compose.io](https://www.compose.io/).  Our application will be looking for a fully qualified MongoDB connection string with a username and password embedded in it.
+   Leave `MONGO_URL` with the default value of `mongodb://localhost/account-verification`.
 
-### Running the Project
+1. Start the server.
 
-To launch the application, you can use `node .` in the project's root directory. You might also consider using [nodemon](https://github.com/remy/nodemon) for this. It works just like the node command, but automatically restarts your application when you change any source code files.
+   ```bash
+   $ npm start
+   ```
 
-```bash
-npm install -g nodemon
-nodemon .
-```
+1. Check it out at [http://localhost:3000](http://localhost:3000).
 
-## License
+## Docker Local Development
 
-MIT
+1. Make sure [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/) are installed.
+
+1. Set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_NUMBER` and `AUTHY_API_KEY` configuration variables as explained above.
+
+1. Build the containers with:
+
+  ```bash
+  $ docker-compose build
+  ```
+
+1. Get the name of the Mongo container with:
+
+  ```bash
+  $ docker-compose ps
+  ```
+
+  Then set the `MONGO_URL` configuration variable in `.env` to `mongodb://{mongo-container-name}/account-verification`.
+
+1. Remove the project's **node_modules** folder.
+
+1. Finally, run the following commands to start your Docker containers.
+
+   ```bash
+   $ docker-compose up -d
+   ```
+
+1. Check it out at [http://localhost:3000](http://localhost:3000).
+
+## Meta
+
+* No warranty expressed or implied. Software is as is. Diggity.
+* [MIT License](http://www.opensource.org/licenses/mit-license.html)
+* Lovingly crafted by Twilio Developer Education.

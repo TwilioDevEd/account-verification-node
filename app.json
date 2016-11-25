@@ -30,7 +30,7 @@
   "website": "https://github.com/TwilioDevEd/account-verification-node",
   "repository": "https://github.com/TwilioDevEd/account-verification-node",
   "logo": "https://s3.amazonaws.com/howtodocs/twilio-logo.png",
-  "success_url": "/",
+  "success_url": "/landing.html",
   "addons": [
     "mongolab"
   ]
