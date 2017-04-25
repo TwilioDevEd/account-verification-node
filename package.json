@@ -35,7 +35,7 @@
     "jade": "^1.9.2",
     "mongoose": "^4.0.6",
     "morgan": "^1.5.1",
-    "twilio": "3.0.0-rc.13"
+    "twilio": ">=3.0.0-rc.16 < 3.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
