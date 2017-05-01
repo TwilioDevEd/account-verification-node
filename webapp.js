@@ -1,13 +1,13 @@
-var path = require('path');
-var express = require('express');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var flash = require('connect-flash');
-var morgan = require('morgan');
-var config = require('./config');
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+const morgan = require('morgan');
+const config = require('./config');
 
 // Create Express web app
-var app = express();
+const app = express();
 app.set('view engine', 'jade');
 
 // Use morgan for HTTP request logging
@@ -18,14 +18,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Parse incoming form-encoded HTTP bodies
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true,
 }));
 
 // Create and manage HTTP sessions for all requests
 app.use(session({
     secret: config.secret,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
 }));
 
 // Use connect-flash to persist informational messages across redirects
@@ -35,7 +35,7 @@ app.use(flash());
 require('./controllers/router')(app);
 
 // Handle 404
-app.use(function (request, response, next) {
+app.use(function(request, response, next) {
     response.status(404);
     response.sendFile(path.join(__dirname, 'public', '404.html'));
 });

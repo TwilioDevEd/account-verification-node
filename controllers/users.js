@@ -1,25 +1,25 @@
-var User = require('../models/User');
+const User = require('../models/User');
 
 // Display a form that allows users to sign up for a new account
 exports.showCreate = function(request, response) {
     response.render('users/create', {
         title: 'Create User Account',
         // include any errors (success messages not possible for view)
-        errors: request.flash('errors')
+        errors: request.flash('errors'),
     });
 };
 
 // create a new user based on the form submission
 exports.create = function(request, response) {
-    var params = request.body;
+    const params = request.body;
 
     // Create a new user based on form parameters
-    var user = new User({
+    const user = new User({
         fullName: params.fullName,
         email: params.email,
         phone: params.phone,
         countryCode: params.countryCode,
-        password: params.password
+        password: params.password,
     });
 
     user.save(function(err, doc) {
@@ -32,7 +32,6 @@ exports.create = function(request, response) {
                 + ' double-check your input and try again.');
 
             response.redirect('/users/new');
-
         } else {
             // If the user is created successfully, send them an account
             // verification token
@@ -58,7 +57,7 @@ exports.showVerify = function(request, response) {
         // success messsages
         successes: request.flash('successes'),
         // Include database ID to include in form POST action
-        id: request.params.id
+        id: request.params.id,
     });
 };
 
@@ -94,7 +93,7 @@ exports.resend = function(request, response) {
 
 // Handle submission of verification token
 exports.verify = function(request, response) {
-    var user;
+    let user = {};
 
     // Load user model
     User.findById(request.params.id, function(err, doc) {
@@ -126,7 +125,7 @@ exports.verify = function(request, response) {
         }
 
         // Send confirmation text message
-        var message = 'You did it! Signup complete :)';
+        const message = 'You did it! Signup complete :)';
         user.sendMessage(message, function() {
           // show success page
           request.flash('successes', message);
@@ -134,7 +133,7 @@ exports.verify = function(request, response) {
         }, function(err) {
           request.flash('errors', 'You are signed up, but '
               + 'we could not send you a message. Our bad :(');
-        })
+        });
     }
 
     // respond with an error
@@ -159,7 +158,7 @@ exports.showUser = function(request, response, next) {
             // any errors
             errors: request.flash('errors'),
             // any success messages
-            successes: request.flash('successes')
+            successes: request.flash('successes'),
         });
     });
 };

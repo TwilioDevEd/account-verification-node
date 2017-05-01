@@ -22,14 +22,14 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 1. First clone this repository and `cd` into it.
 
    ```bash
-   $ git clone git@github.com:TwilioDevEd/account-verification-node.git
-   $ cd account-verification-node
+   git clone git@github.com:TwilioDevEd/account-verification-node.git
+   cd account-verification-node
    ```
 
 1. Copy the sample configuration file and edit it to match your configuration.
 
    ```bash
-   $ cp .env.example .env
+   cp .env.example .env
    ```
 
    You can find your `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` in your
@@ -44,7 +44,7 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 1. Start the server.
 
    ```bash
-   $ npm start
+   npm start
    ```
 
 1. Check it out at [http://localhost:3000](http://localhost:3000).
@@ -58,13 +58,13 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 1. Build the containers with:
 
   ```bash
-  $ docker-compose build
+  docker-compose build
   ```
 
 1. Get the name of the Mongo container with:
 
   ```bash
-  $ docker-compose ps
+  docker-compose ps
   ```
 
   Then set the `MONGO_URL` configuration variable in `.env` to `mongodb://{mongo-container-name}/account-verification`.
@@ -74,7 +74,7 @@ This project is build using [Node.js](https://nodejs.org) and depends on [MongoD
 1. Finally, run the following commands to start your Docker containers.
 
    ```bash
-   $ docker-compose up -d
+   docker-compose up -d
    ```
 
 1. Check it out at [http://localhost:3000](http://localhost:3000).

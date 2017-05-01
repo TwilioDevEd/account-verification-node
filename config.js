@@ -1,15 +1,15 @@
-var dotenvSafe = require('dotenv-safe');
+const dotenvSafe = require('dotenv-safe');
 
-var nodeEnv = process.env.NODE_ENV;
+const nodeEnv = process.env.NODE_ENV;
 if(nodeEnv && nodeEnv === 'production') {
   // If it's running in Heroku, we set MONGO_URL to an arbitrary value so that
   // dotenv-safe doesn't throw an error. MONGO_URL is not read in Heroku as
   // MONGODB_URI will be set
-  process.env.MONGO_URL = "placeholder"
+  process.env.MONGO_URL = 'placeholder';
 }
 dotenvSafe.load();
 
-var cfg = {};
+const cfg = {};
 
 // HTTP Port to run our web application
 cfg.port = process.env.PORT || 3000;
