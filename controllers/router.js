@@ -1,5 +1,5 @@
-var home = require('./home');
-var users = require('./users');
+const home = require('./home');
+const users = require('./users');
 
 // Map routes to controller functions
 module.exports = function(app) {

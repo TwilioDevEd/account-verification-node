@@ -1,47 +1,47 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
-var config = require('../config');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const config = require('../config');
 
 // Create authenticated Authy and Twilio API clients
-var authy = require('authy')(config.authyKey);
-var twilioClient = require('twilio')(config.accountSid, config.authToken);
+const authy = require('authy')(config.authyKey);
+const twilioClient = require('twilio')(config.accountSid, config.authToken);
 
 // Used to generate password hash
-var SALT_WORK_FACTOR = 10;
+const SALT_WORK_FACTOR = 10;
 
 // Define user model schema
-var UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        required: true
+        required: true,
     },
     countryCode: {
         type: String,
-        required: true
+        required: true,
     },
     phone: {
         type: String,
-        required: true
+        required: true,
     },
     verified: {
         type: Boolean,
-        default: false
+        default: false,
     },
     authyId: String,
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 });
 
 // Middleware executed before save - hash the user's password
 UserSchema.pre('save', function(next) {
-    var self = this;
+    const self = this;
 
     // only hash the password if it has been modified (or is new)
     if (!self.isModified('password')) return next();
@@ -63,7 +63,7 @@ UserSchema.pre('save', function(next) {
 
 // Test candidate password
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
-    var self = this;
+    const self = this;
     bcrypt.compare(candidatePassword, self.password, function(err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);
@@ -72,13 +72,12 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 // Send a verification token to this user
 UserSchema.methods.sendAuthyToken = function(cb) {
-    var self = this;
+    const self = this;
 
     if (!self.authyId) {
         // Register this user if it's a new user
-        authy.register_user(self.email, self.phone, self.countryCode, 
+        authy.register_user(self.email, self.phone, self.countryCode,
             function(err, response) {
-                
             if (err || !response.user) return cb.call(self, err);
             self.authyId = response.user.id;
             self.save(function(err, doc) {
@@ -102,23 +101,28 @@ UserSchema.methods.sendAuthyToken = function(cb) {
 
 // Test a 2FA token
 UserSchema.methods.verifyAuthyToken = function(otp, cb) {
-    var self = this;
+    const self = this;
     authy.verify(self.authyId, otp, function(err, response) {
         cb.call(self, err, response);
     });
 };
 
 // Send a text message via twilio to this user
-UserSchema.methods.sendMessage = function(message, cb) {
-    var self = this;
-    twilioClient.sendMessage({
-        to: self.countryCode+self.phone,
-        from: config.twilioNumber,
-        body: message
-    }, function(err, response) {
-        cb.call(self, err);
-    });
-};
+UserSchema.methods.sendMessage =
+  function(message, successCallback, errorCallback) {
+      const self = this;
+      const toNumber = `+${self.countryCode}${self.phone}`;
+
+      twilioClient.messages.create({
+          to: toNumber,
+          from: config.twilioNumber,
+          body: message,
+      }).then(function() {
+        successCallback();
+      }).catch(function(err) {
+        errorCallback(err);
+      });
+  };
 
 // Export user model
 module.exports = mongoose.model('User', UserSchema);
