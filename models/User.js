@@ -72,7 +72,7 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 // Send a verification token to this user
 UserSchema.methods.sendAuthyToken = function(cb) {
-    const self = this;
+    var self = this;
 
     if (!self.authyId) {
         // Register this user if it's a new user
