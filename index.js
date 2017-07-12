@@ -4,7 +4,18 @@ const config = require('./config');
 
 // Initialize database connection - throws if database connection can't be
 // established
-mongoose.connect(config.mongoUrl);
+
+// initialize MongoDB connection
+if (process.env.VCAP_SERVICES) {
+    mongoose.connect(
+        config.mongoUrl,
+        config.mongoDbOptions
+    );
+} else {
+    mongoose.connect(
+        config.mongoUrl
+    );
+}
 mongoose.Promise = Promise;
 
 // Create Express web app
