@@ -11,10 +11,6 @@ When a new user signs up for your application, you want to make sure their conta
 
 [View the full tutorial here](https://www.twilio.com/docs/tutorials/walkthrough/account-verification/node/express)!
 
-## Deploy On Heroku
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/TwilioDevEd/account-verification-node)
-
 ## Local Development
 
 This project is build using [Node.js](https://nodejs.org) and depends on [MongoDB](https://www.mongodb.com).
