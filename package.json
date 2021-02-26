@@ -26,7 +26,7 @@
   "homepage": "https://github.com/TwilioDevEd/account-verification-node",
   "dependencies": {
     "authy": "^1.2.0",
-    "bcrypt": "^0.8.1",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.12.0",
     "connect-flash": "^0.1.1",
     "dotenv-safe": "^3.0.0",
