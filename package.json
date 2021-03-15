@@ -39,7 +39,7 @@
     "twilio": ">=3.0.0-rc.16 < 3.1.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.3.4",
     "mocha": "^3.1.2"
   },
   "engines": {
