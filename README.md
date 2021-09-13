@@ -2,6 +2,12 @@
   <img src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg" alt="Twilio" width="250" />
 </a>
 
+# Important Notice
+
+For new development, we encourage you to use the Verify API instead of the Authy API. The Verify API is an evolution of the Authy API with continued support for SMS, voice, and email one-time passcodes, an improved developer experience and new features.
+
+Please visit the [Verify Quickstarts Page](https://www.twilio.com/docs/verify/quickstarts) to get started with the Verify API. Thank you!
+
 
 # User Account Verification with Node.js/Express and Twilio
 
